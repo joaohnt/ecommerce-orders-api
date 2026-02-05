@@ -24,4 +24,19 @@ public class OrderController : ControllerBase
         return Ok(newOrder);
     }
     
+    [HttpGet]
+    [Route("/orders")]
+    public async Task<IActionResult> GetOrders()
+    {
+        var orders =  await _orderService.GetOrders();
+        return Ok(orders);
+    }
+    
+    [HttpGet]
+    [Route("/order/{id}")]
+    public async Task<IActionResult> GetOrders([FromRoute]int id)
+    {
+        var orders =  await _orderService.GetOrderById(id);
+        return Ok(orders);
+    }
 }

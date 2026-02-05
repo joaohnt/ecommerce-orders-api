@@ -26,12 +26,14 @@ public class OrderService : IOrderService
 
     public Task<List<Order>> GetOrders()
     {
-        throw new NotImplementedException();
+        var orders =  _orderRepository.GetOrders();
+        return orders;
     }
 
     public Task<Order> GetOrderById(int orderId)
     {
-        throw new NotImplementedException();
+        var order = _orderRepository.GetOrderById(orderId);
+        return order;
     }
 
     public Task UpdateOrder(Order order)
