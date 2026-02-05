@@ -1,4 +1,5 @@
-﻿using Ecommerce.Domain.Entities;
+﻿using Ecommerce.Application.DTOs;
+using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ public class OrderController : ControllerBase
 
     [HttpPost]
     [Route("/order")]
-    public async Task<IActionResult> CreateOrder([FromBody]Order order)
+    public async Task<IActionResult> CreateOrder([FromBody]OrderDTO order)
     {
         var newOrder = await _orderService.CreateOrder(order);
         return Ok(newOrder);
