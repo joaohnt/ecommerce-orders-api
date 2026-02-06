@@ -47,46 +47,35 @@ public class OrderTests
         Assert.Single(order.OrderItems);
     }
     [Fact]
-    public void UpdateOrder_WithValidItemId_ThenShouldUpdateItem()
+    public void ClearItemsToUpdate_WithValidStatus_ThenShouldClearItems()
     {
         var order = new Order();
-        var itemId = 0;
         order.AddOrderItem(1, "Mouse", 10);
         
-        order.UpdateOrder(2, "Mouse", 25, itemId); 
+        order.ClearItemsToUpdate();
         
-        var updated = order.OrderItems.First();
-        Assert.Equal(2, updated.Quantity);
-        Assert.Equal(25, updated.Price);
         Assert.NotNull(order.UpdatedAt); 
     }
     
     [Fact]
-    public void UpdateOrder_WithInvalidItemId_ThenShouldThrowException()
+    public void ClearItemsToUpdate_WithStatusProcessed_ShouldThrow()
     {
         var order = new Order();
-        var itemId = 5;
-        order.AddOrderItem(1, "Mouse", 10);
-        
-        var act = () => order.UpdateOrder(2, "Mouse", 25, itemId); 
-        
-        Assert.Throws<ArgumentException>(act);
+        typeof(Order).GetProperty("Status")!.SetValue(order, Status.Processed);
+
+        var act = () => order.ClearItemsToUpdate();
+
+        Assert.Throws<InvalidOperationException>(act);
     }
-    
-    [Theory]
-    [InlineData(Status.Canceled)]
-    [InlineData(Status.Processed)]
-    public void UpdateOrder_WithInvalidStatus_ThenShouldThrowException(Status status)
+
+    [Fact]
+    public void ClearItemsToUpdate_WithStatusCanceled_ShouldThrow()
     {
         var order = new Order();
-        typeof(Order)
-            .GetProperty("Status")!
-            .SetValue(order, status);        
-        var itemId = 0;
-        order.AddOrderItem(1, "Mouse", 10);
-        
-        var act = () => order.UpdateOrder(2, "Mouse", 25, itemId); 
-        
+        typeof(Order).GetProperty("Status")!.SetValue(order, Status.Canceled);
+
+        var act = () => order.ClearItemsToUpdate();
+
         Assert.Throws<InvalidOperationException>(act);
     }
     
