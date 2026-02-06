@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Ecommerce.Api.ExceptionHandling;
 using Ecommerce.Application.Repositories;
 using Ecommerce.Application.Services;
 using Ecommerce.Domain.Service;
@@ -14,6 +15,8 @@ public static class BuilderExtensions
     {
         builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())); 
         builder.Services.AddOpenApi();
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
         return builder;
     }
     public static WebApplicationBuilder AddApplicationServices(this WebApplicationBuilder builder)

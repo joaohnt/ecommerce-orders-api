@@ -20,6 +20,7 @@ public class OrderService : IOrderService
         
         foreach (var item in orderDto.Items)
             order.AddOrderItem(item.Quantity, item.Name, item.Price);
+        order.EnsureHasItems();
         
         await _orderRepository.CreateOrder(order);
         return orderDto;
@@ -34,12 +35,16 @@ public class OrderService : IOrderService
     public async Task<Order> GetOrderById(int orderId)
     {
         var order = await _orderRepository.GetOrderById(orderId);
+        if(order == null)
+            throw new KeyNotFoundException($"O pedido de id: {orderId} não existe. ");
         return order;
     }
 
     public async Task<OrderDTO> UpdateOrder(int id, OrderDTO orderDto)
     {
         var order =  await _orderRepository.GetOrderById(id);
+        if (order == null)
+            throw new KeyNotFoundException($"O pedido de id: {id} não existe. ");
         
         order.ClearItemsToUpdate();
         foreach (var item in orderDto.Items )
@@ -53,6 +58,8 @@ public class OrderService : IOrderService
     public async Task CancelOrder(int orderId)
     {
         var order = await _orderRepository.GetOrderById(orderId);
+        if (order == null)
+            throw new KeyNotFoundException($"O pedido de id: {orderId} não existe. ");
         order.CancelOrder();
         
         await  _orderRepository.SaveAsync(order);

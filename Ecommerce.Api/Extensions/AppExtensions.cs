@@ -5,6 +5,7 @@ public static class AppExtensions
     public static WebApplication UseApi(this WebApplication app)
     {
         app.MapControllers();
+        app.UseExceptionHandler();
         return app;
     }
 }

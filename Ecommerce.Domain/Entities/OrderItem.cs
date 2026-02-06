@@ -19,11 +19,4 @@ public class OrderItem
         Price = price;
         Quantity = quantity;
     }
-    
-    internal void Update(string name, decimal price, int quantity)
-    {
-        Name = name;
-        Price = price;
-        Quantity = quantity;
-    }
 }

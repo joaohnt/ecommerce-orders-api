@@ -21,7 +21,7 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> CreateOrder([FromBody]OrderDTO order)
     {
         var newOrder = await _orderService.CreateOrder(order);
-        return Ok(newOrder);
+        return Created("",  newOrder);
     }
     
     [HttpGet]
