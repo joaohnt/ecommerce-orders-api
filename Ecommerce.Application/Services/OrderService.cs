@@ -1,4 +1,5 @@
-﻿using Ecommerce.Application.DTOs;
+﻿using System.Reflection.Metadata.Ecma335;
+using Ecommerce.Application.DTOs;
 using Ecommerce.Application.Repositories;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Service;
@@ -24,20 +25,28 @@ public class OrderService : IOrderService
         return orderDto;
     }
 
-    public Task<List<Order>> GetOrders()
+    public async Task<List<Order>> GetOrders()
     {
-        var orders =  _orderRepository.GetOrders();
+        var orders =  await _orderRepository.GetOrders();
         return orders;
     }
 
-    public Task<Order> GetOrderById(int orderId)
+    public async Task<Order> GetOrderById(int orderId)
     {
-        var order = _orderRepository.GetOrderById(orderId);
+        var order = await _orderRepository.GetOrderById(orderId);
         return order;
     }
 
-    public Task UpdateOrder(Order order)
+    public async Task<OrderDTO> UpdateOrder(int id, OrderDTO orderDto)
     {
-        throw new NotImplementedException();
+        var order =  await _orderRepository.GetOrderById(id);
+        
+        order.ClearItemsToUpdate();
+        foreach (var item in orderDto.Items )
+            order.AddOrderItem(item.Quantity, item.Name, item.Price);
+        
+        await _orderRepository.UpdateOrder(order);
+        
+        return orderDto;
     }
 }

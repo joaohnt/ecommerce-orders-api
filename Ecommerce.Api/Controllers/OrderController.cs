@@ -39,4 +39,12 @@ public class OrderController : ControllerBase
         var orders =  await _orderService.GetOrderById(id);
         return Ok(orders);
     }
+    
+    [HttpPut]
+    [Route("/order/{id}")]
+    public async Task<IActionResult> GetOrderById([FromRoute]int id, [FromBody]OrderDTO order)
+    {
+        var updatedOrder = await _orderService.UpdateOrder(id, order);
+        return Ok(updatedOrder);
+    }
 }

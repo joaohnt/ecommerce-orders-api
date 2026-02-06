@@ -27,23 +27,17 @@ public class Order
         if(string.IsNullOrEmpty(name)) 
             throw new ArgumentNullException(nameof(name));
     }
-
-    public void UpdateOrder(int quantity, string name, decimal price, int itemId)
+    
+    public void ClearItemsToUpdate()
     {
-        var item = _orderItems.FirstOrDefault(i => i.Id == itemId);
-        if(item == null)
-            throw new ArgumentException("item nao pertence ao pedido");
         if (Status == Status.Processed)
             throw new  InvalidOperationException("Não é possível alterar um pedido já processado (400 bad request)");
         if (Status == Status.Canceled)
             throw new InvalidOperationException(" n pode alterar pedido cancelado");
-        
-        CheckItem(name, price, quantity);
-        
-        item.Update(name, price, quantity);
+        _orderItems.Clear();
         UpdatedAt = DateTime.UtcNow;
     }
-
+    
     public void AddOrderItem(int quantity, string name, decimal price)
     {
         CheckItem(name, price, quantity);

@@ -26,6 +26,11 @@ public class OrderRepository : IOrderRepository
 
     public Task<Order> GetOrderById(int orderId)
     {
-        return _context.Orders.Include(i => i.OrderItems).Where(o => o.Id == orderId).AsNoTracking().FirstOrDefaultAsync();
+        return _context.Orders.Include(i => i.OrderItems).Where(o => o.Id == orderId).FirstOrDefaultAsync();
+    }
+
+    public Task UpdateOrder(Order order)
+    {
+        return _context.SaveChangesAsync();
     }
 }
