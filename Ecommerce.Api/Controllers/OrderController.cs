@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Application.DTOs;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Service;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Controllers;
@@ -9,11 +10,13 @@ namespace Ecommerce.Api.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly ILogger<OrderController> _logger;
+    private readonly IPublishEndpoint _publisher;
     private readonly IOrderService _orderService;
-    public OrderController(ILogger<OrderController> logger, IOrderService orderService)
+    public OrderController(ILogger<OrderController> logger, IOrderService orderService,  IPublishEndpoint publisher)
     {
         _logger = logger;
         _orderService = orderService;
+        _publisher = publisher;
     }
 
     [HttpPost]
@@ -21,6 +24,10 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> CreateOrder([FromBody]OrderDTO order)
     {
         var newOrder = await _orderService.CreateOrder(order);
+        
+        await _publisher.Publish(newOrder);
+        _logger.LogInformation("Order created");
+        
         return Created("",  newOrder);
     }
     
