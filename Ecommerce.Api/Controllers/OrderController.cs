@@ -47,4 +47,12 @@ public class OrderController : ControllerBase
         var updatedOrder = await _orderService.UpdateOrder(id, order);
         return Ok(updatedOrder);
     }
+    
+    [HttpDelete]
+    [Route("/order/{id}")]
+    public async Task<IActionResult> CancelOrder([FromRoute]int id)
+    {
+        await _orderService.CancelOrder(id);
+        return NoContent();
+    }
 }

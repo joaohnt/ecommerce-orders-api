@@ -29,7 +29,7 @@ public class OrderRepository : IOrderRepository
         return _context.Orders.Include(i => i.OrderItems).Where(o => o.Id == orderId).FirstOrDefaultAsync();
     }
 
-    public Task UpdateOrder(Order order)
+    public Task SaveAsync(Order order)
     {
         return _context.SaveChangesAsync();
     }

@@ -45,8 +45,16 @@ public class OrderService : IOrderService
         foreach (var item in orderDto.Items )
             order.AddOrderItem(item.Quantity, item.Name, item.Price);
         
-        await _orderRepository.UpdateOrder(order);
+        await _orderRepository.SaveAsync(order);
         
         return orderDto;
+    }
+
+    public async Task CancelOrder(int orderId)
+    {
+        var order = await _orderRepository.GetOrderById(orderId);
+        order.CancelOrder();
+        
+        await  _orderRepository.SaveAsync(order);
     }
 }
