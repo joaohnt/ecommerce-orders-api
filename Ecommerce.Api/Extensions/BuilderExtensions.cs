@@ -3,8 +3,10 @@ using Ecommerce.Api.ExceptionHandling;
 using Ecommerce.Application.Repositories;
 using Ecommerce.Application.Services;
 using Ecommerce.Domain.Service;
+using Ecommerce.Infrastructure.Consumer;
 using Ecommerce.Infrastructure.Database.Context;
 using Ecommerce.Infrastructure.Repositories;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Api.Extensions;
@@ -29,6 +31,29 @@ public static class BuilderExtensions
     {
         var conn = builder.Configuration.GetConnectionString("SqlConnection");
         builder.Services.AddDbContext<EcommerceDbContext>(options => options.UseSqlServer(conn));
+        return builder;
+    }
+
+    public static WebApplicationBuilder AddMessaging(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMassTransit(x =>
+        {
+            x.AddConsumer<OrderCreatedConsumer>();
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(
+                    builder.Configuration["RabbitMq:Host"],
+                    builder.Configuration["RabbitMq:VirtualHost"],
+                    h =>
+                    {
+                        h.Username(builder.Configuration["RabbitMq:Username"]);
+                        h.Password(builder.Configuration["RabbitMq:Password"]);
+                    });        cfg.ReceiveEndpoint("meu-evento", e =>
+                {
+                    e.ConfigureConsumer<OrderCreatedConsumer>(context);
+                });
+            });
+        });
         return builder;
     }
     

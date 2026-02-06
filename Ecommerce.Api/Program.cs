@@ -3,7 +3,8 @@ using Ecommerce.Api.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 builder.AddApi()
     .AddApplicationServices()
-    .AddDatabase();
+    .AddDatabase()
+    .AddMessaging();
 
 var app = builder.Build();
 app.UseApi();
