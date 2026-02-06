@@ -17,23 +17,28 @@ public class Order
         Status = Status.Received;
         CreatedAt = DateTime.UtcNow;
     }
-    
+
+    public void EnsureHasItems()
+    {
+        if (_orderItems.Count == 0)
+            throw new ArgumentException("A lista de itens não pode ser vazia");
+    }
     private void CheckItem(string name, decimal price, int quantity)
     {
         if(quantity < 1)
-            throw new ArgumentOutOfRangeException(nameof(quantity), "qtd maior tem q ser >0");
+            throw new ArgumentOutOfRangeException(nameof(quantity), "A quantidade não pode ser inferior a 1");
         if(price <= 0)
-            throw new ArgumentOutOfRangeException(nameof(price), "preco tem q ser >0");
+            throw new ArgumentOutOfRangeException(nameof(price), "O preço precisa ser superior a 0");
         if(string.IsNullOrEmpty(name)) 
-            throw new ArgumentNullException(nameof(name));
+            throw new ArgumentNullException(nameof(name), "O nome não pode ser vazio");
     }
     
     public void ClearItemsToUpdate()
     {
         if (Status == Status.Processed)
-            throw new  InvalidOperationException("Não é possível alterar um pedido já processado (400 bad request)");
+            throw new  InvalidOperationException("Não é possível alterar um pedido já processado");
         if (Status == Status.Canceled)
-            throw new InvalidOperationException(" n pode alterar pedido cancelado");
+            throw new InvalidOperationException("Não é possivel alterar um pedido cancelado");
         _orderItems.Clear();
         UpdatedAt = DateTime.UtcNow;
     }
@@ -47,7 +52,7 @@ public class Order
     public void CancelOrder()
     {
         if(Status == Status.Canceled)
-            throw  new InvalidOperationException("Pedido ja esta cancelado");
+            throw new InvalidOperationException("O pedido já está cancelado.");
         
         Status =  Status.Canceled;
         UpdatedAt = DateTime.UtcNow;
