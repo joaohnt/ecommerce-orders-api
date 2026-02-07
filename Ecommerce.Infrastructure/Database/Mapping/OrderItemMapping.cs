@@ -13,7 +13,7 @@ public class OrderItemMap : IEntityTypeConfiguration<OrderItem>
         builder.Property(o => o.Id).ValueGeneratedOnAdd().UseIdentityColumn();
         
         builder.Property(o  => o.Name).HasMaxLength(100).IsRequired();
-        builder.Property(o => o.Price).HasColumnType("decimal(18,2)").IsRequired();
+        builder.Property(o => o.Price).HasPrecision(18,2).IsRequired();
         builder.Property(o => o.Quantity).HasColumnType("int").IsRequired();
         
     }

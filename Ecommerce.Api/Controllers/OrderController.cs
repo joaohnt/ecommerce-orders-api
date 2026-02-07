@@ -52,6 +52,7 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> GetOrderById([FromRoute]int id, [FromBody]OrderDTO order)
     {
         var updatedOrder = await _orderService.UpdateOrder(id, order);
+        _logger.LogInformation("Order updated");
         return Ok(updatedOrder);
     }
     
@@ -60,6 +61,7 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> CancelOrder([FromRoute]int id)
     {
         await _orderService.CancelOrder(id);
+        _logger.LogInformation("Order canceled");
         return NoContent();
     }
 }

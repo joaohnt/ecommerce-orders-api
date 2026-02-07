@@ -15,8 +15,8 @@ public class OrderCreatedConsumer : IConsumer<OrderDTO>
     public Task Consume(ConsumeContext<OrderDTO> context)
     {
         var msg = context.Message;
-        _logger.LogInformation("Order recieved}");
-        _logger.LogInformation(Guid.NewGuid().ToString());
+        _logger.LogInformation("Order received");
+        _logger.LogInformation("Order status changed to processed");
         return Task.CompletedTask;  
     }
 }
