@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Application.Repositories;
 using Ecommerce.Domain.Entities;
+using Ecommerce.Domain.Enums;
 using Ecommerce.Infrastructure.Database.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,19 +35,29 @@ public class OrderRepository : IOrderRepository
         return _context.SaveChangesAsync();
     }
 
-    public Task<List<Order>> GetOrdersPaged(int page, int size)
+    public Task<List<Order>> GetOrdersPaged(int page, int size, Status? status=null)
     {
-        return _context.Orders
+        var query = _context.Orders
             .Include(o => o.OrderItems)
             .AsNoTracking()
+            .AsQueryable();
+            if(status.HasValue)
+                query = query.Where(o => o.Status == status.Value);
+                    
+        return query
             .OrderByDescending(o => o.Id) 
             .Skip(page * size)
             .Take(size)
             .ToListAsync();
     }
 
-    public Task<int> GetOrdersCount()
+    public Task<int> GetOrdersCount(Status? status=null)
     {
-        return _context.Orders.CountAsync();
+        var query = _context.Orders.AsQueryable();
+
+        if (status.HasValue)
+            query = query.Where(o => o.Status == status.Value);
+
+        return query.CountAsync();
     }
 }

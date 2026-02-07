@@ -3,6 +3,7 @@ using Ecommerce.Application.DTOs;
 using Ecommerce.Application.Pagination;
 using Ecommerce.Application.Repositories;
 using Ecommerce.Domain.Entities;
+using Ecommerce.Domain.Enums;
 using Ecommerce.Domain.Service;
 
 namespace Ecommerce.Application.Services;
@@ -66,10 +67,10 @@ public class OrderService : IOrderService
         await  _orderRepository.SaveAsync(order);
     }
 
-    public async Task<PagedResult<Order>> GetOrdersPaged(int page, int size)
+    public async Task<PagedResult<Order>> GetOrdersPaged(int page, int size, Status? status=null)
     {
-        var items = await _orderRepository.GetOrdersPaged(page, size);
-        var total = await _orderRepository.GetOrdersCount();
+        var items = await _orderRepository.GetOrdersPaged(page, size, status);
+        var total = await _orderRepository.GetOrdersCount(status);
 
         return new PagedResult<Order>
         {

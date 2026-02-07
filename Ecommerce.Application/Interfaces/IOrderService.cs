@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Application.DTOs;
 using Ecommerce.Application.Pagination;
 using Ecommerce.Domain.Entities;
+using Ecommerce.Domain.Enums;
 
 namespace Ecommerce.Domain.Service;
 
@@ -11,5 +12,5 @@ public interface IOrderService
     Task<Order> GetOrderById(int orderId);
     Task<OrderDTO> UpdateOrder(int orderId, OrderDTO order);
     Task CancelOrder(int orderId);
-    Task<PagedResult<Order>> GetOrdersPaged(int page, int size);
+    Task<PagedResult<Order>> GetOrdersPaged(int page, int size, Status? status=null);
 }

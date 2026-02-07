@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Application.DTOs;
 using Ecommerce.Application.Pagination;
 using Ecommerce.Domain.Entities;
+using Ecommerce.Domain.Enums;
 using Ecommerce.Domain.Service;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -34,9 +35,9 @@ public class OrderController : ControllerBase
     
     [HttpGet]
     [Route("/orders")]
-    public async Task<IActionResult> GetOrders([FromQuery]int page = 0, [FromQuery] int size = 4)
+    public async Task<IActionResult> GetOrders([FromQuery]int page = 0, [FromQuery] int size = 4, [FromQuery] Status? status = null)
     {
-        var result = await _orderService.GetOrdersPaged(page, size);
+        var result = await _orderService.GetOrdersPaged(page, size, status);
         return Ok(result);
     }
     
