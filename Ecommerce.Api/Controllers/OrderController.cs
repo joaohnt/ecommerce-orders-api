@@ -1,7 +1,5 @@
 ﻿using Ecommerce.Application.DTOs;
-using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Service;
-using Ecommerce.Infrastructure.Consumer;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +25,7 @@ public class OrderController : ControllerBase
         var newOrder = await _orderService.CreateOrder(order);
         
         await _publisher.Publish(new OrderCreatedPayload(newOrder.Id));
-        _logger.LogInformation("Order created");
+        _logger.LogInformation($"Order {newOrder.Id} created and published");
         
         return Created("",  newOrder);
     }

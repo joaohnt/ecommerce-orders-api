@@ -1,4 +1,6 @@
-﻿namespace Ecommerce.Api.Extensions;
+﻿using Hangfire;
+
+namespace Ecommerce.Api.Extensions;
 
 public static class AppExtensions
 {
@@ -6,8 +8,7 @@ public static class AppExtensions
     {
         app.MapControllers();
         app.UseExceptionHandler();
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseHangfireDashboard("/hangfire");
         return app;
     }
 }
