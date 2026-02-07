@@ -18,7 +18,7 @@ EXPOSE 8080
 COPY --from=publish-api /app/publish/api .
 ENTRYPOINT ["dotnet", "Ecommerce.Api.dll"]
 
-FROM mcr.microsoft.com/dotnet/runtime:10.0 AS worker
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS worker
 WORKDIR /app
 COPY --from=publish-worker /app/publish/worker .
 ENTRYPOINT ["dotnet", "Ecommerce.Worker.dll"]

@@ -16,7 +16,9 @@ using Serilog.Events;
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddDbContext<EcommerceDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("SqlConnection"),
+        sql => sql.EnableRetryOnFailure()));
 
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<ProcessOrderJob>();
