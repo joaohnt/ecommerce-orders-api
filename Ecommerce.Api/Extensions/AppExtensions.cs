@@ -6,6 +6,8 @@ public static class AppExtensions
     {
         app.MapControllers();
         app.UseExceptionHandler();
+        app.UseSwagger();
+        app.UseSwaggerUI();
         return app;
     }
 }

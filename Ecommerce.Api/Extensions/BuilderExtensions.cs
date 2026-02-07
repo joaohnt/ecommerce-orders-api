@@ -23,6 +23,7 @@ public static class BuilderExtensions
         builder.Services.AddOpenApi();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddProblemDetails();
+        builder.Services.AddSwaggerGen();
         builder.Host.UseSerilog();
         return builder;
     }
