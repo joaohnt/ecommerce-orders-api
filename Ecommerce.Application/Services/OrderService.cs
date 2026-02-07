@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using Ecommerce.Application.DTOs;
+using Ecommerce.Application.Pagination;
 using Ecommerce.Application.Repositories;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Service;
@@ -63,5 +64,20 @@ public class OrderService : IOrderService
         order.CancelOrder();
         
         await  _orderRepository.SaveAsync(order);
+    }
+
+    public async Task<PagedResult<Order>> GetOrdersPaged(int page, int size)
+    {
+        var items = await _orderRepository.GetOrdersPaged(page, size);
+        var total = await _orderRepository.GetOrdersCount();
+
+        return new PagedResult<Order>
+        {
+            Items = items,
+            PageNumber = page,
+            PageSize = size,
+            TotalRecords = total
+        };
+
     }
 }

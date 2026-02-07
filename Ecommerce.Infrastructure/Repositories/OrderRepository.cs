@@ -33,4 +33,20 @@ public class OrderRepository : IOrderRepository
     {
         return _context.SaveChangesAsync();
     }
+
+    public Task<List<Order>> GetOrdersPaged(int page, int size)
+    {
+        return _context.Orders
+            .Include(o => o.OrderItems)
+            .AsNoTracking()
+            .OrderByDescending(o => o.Id) 
+            .Skip(page * size)
+            .Take(size)
+            .ToListAsync();
+    }
+
+    public Task<int> GetOrdersCount()
+    {
+        return _context.Orders.CountAsync();
+    }
 }
