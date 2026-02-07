@@ -49,12 +49,18 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("System", LogEventLevel.Warning)
     .MinimumLevel.Override("MassTransit", LogEventLevel.Warning)
     .MinimumLevel.Override("MassTransit.Messages", LogEventLevel.Warning)
+    .MinimumLevel.Override("Ecommerce.Worker.Worker", LogEventLevel.Warning) 
+    .MinimumLevel.Override("Hangfire.Processing", LogEventLevel.Warning)
+    .MinimumLevel.Override("Hangfire.Server", LogEventLevel.Warning)
+    .MinimumLevel.Override("Hangfire.SqlServer", LogEventLevel.Warning)
     .WriteTo.Console(outputTemplate: outputTemplate)
     .WriteTo.MongoDB(
         "mongodb://admin:admin123@localhost:27017/EcommerceLogs?authSource=admin",
         collectionName: "EcommerceLogs")
     .Enrich.FromLogContext()
     .CreateLogger();
+builder.Services.AddSerilog(Log.Logger);
+
 
 builder.Services.AddMassTransit(x =>
 {

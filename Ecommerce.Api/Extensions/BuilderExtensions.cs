@@ -112,23 +112,4 @@ public static class BuilderExtensions
         builder.Host.UseSerilog();
         return builder;
     }
-    // public static WebApplicationBuilder AddHangfire(this WebApplicationBuilder builder)
-    // {
-    //     builder.Services.AddHangfire(config =>
-    //     {
-    //         config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    //             .UseSimpleAssemblyNameTypeSerializer()
-    //             .UseRecommendedSerializerSettings()
-    //             .UseSqlServerStorage(
-    //                 builder.Configuration.GetConnectionString("SqlConnection"),
-    //                 new SqlServerStorageOptions
-    //                 {
-    //                     PrepareSchemaIfNecessary = true, 
-    //                     CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-    //                     SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-    //                     QueuePollInterval = TimeSpan.FromSeconds(5)
-    //                 });
-    //     });
-    //     return builder;
-    // }
 }
