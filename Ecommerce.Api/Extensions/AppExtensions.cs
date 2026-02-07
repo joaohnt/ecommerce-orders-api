@@ -9,6 +9,12 @@ public static class AppExtensions
         app.MapControllers();
         app.UseExceptionHandler();
         app.UseHangfireDashboard("/hangfire");
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseHttpsRedirection();
+        }
         return app;
     }
 }
