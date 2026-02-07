@@ -10,5 +10,6 @@ builder.AddApi()
     .AddSerilogLogging();
 
 var app = builder.Build();
+app.ApplyMigrations();
 app.UseApi();
 app.Run();
