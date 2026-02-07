@@ -1,10 +1,10 @@
 # Ecommerce Orders API
 
-API de pedidos com arquitetura em camadas, processamento ass�ncrono via mensageria e worker de background.
+API de pedidos com arquitetura em camadas, processamento assíncrono via mensageria e worker de background.
 
 ## Visão Geral
 
-Este projeto cont�m:
+Este projeto contém:
 
 - `Ecommerce.Api`: API REST para criar, consultar, atualizar e cancelar pedidos.
 - `Ecommerce.Worker`: serviço worker que consome eventos e processa pedidos em background.
@@ -49,14 +49,11 @@ Na raiz do repositório:
 docker compose up --build
 ```
 
-Servi�os dispon�veis:
+Servicos disponíveis:
 
-- API: `http://localhost:5096`
 - Swagger: `http://localhost:5096/swagger`
 - Hangfire Dashboard: `http://localhost:5096/hangfire`
 - RabbitMQ Management: `http://localhost:15672`
-- SQL Server: `localhost,1433`
-- MongoDB: `localhost:27017`
 
 ## Executando localmente (API + Worker)
 
