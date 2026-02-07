@@ -6,6 +6,7 @@ builder.AddApi()
     .AddApplicationServices()
     .AddDatabase()
     .AddMessaging()
+    .AddHangfireMonitoring()
     .AddSerilogLogging();
 
 var app = builder.Build();

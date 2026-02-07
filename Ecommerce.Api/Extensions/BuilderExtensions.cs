@@ -3,10 +3,11 @@ using Ecommerce.Api.ExceptionHandling;
 using Ecommerce.Application.Repositories;
 using Ecommerce.Application.Services;
 using Ecommerce.Domain.Service;
-using Ecommerce.Infrastructure.Consumer;
 using Ecommerce.Infrastructure.Database.Context;
 using Ecommerce.Infrastructure.Mongo;
 using Ecommerce.Infrastructure.Repositories;
+using Hangfire;
+using Hangfire.SqlServer;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -52,7 +53,6 @@ public static class BuilderExtensions
     {
         builder.Services.AddMassTransit(x =>
         {
-            x.AddConsumer<OrderCreatedConsumer>();
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.Host(
@@ -62,14 +62,32 @@ public static class BuilderExtensions
                     {
                         h.Username(builder.Configuration["RabbitMq:Username"]);
                         h.Password(builder.Configuration["RabbitMq:Password"]);
-                    });        cfg.ReceiveEndpoint("meu-evento", e =>
-                {
-                    e.ConfigureConsumer<OrderCreatedConsumer>(context);
-                });
+                    });
             });
         });
         return builder;
     }
+    
+    public static WebApplicationBuilder AddHangfireMonitoring(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddHangfire(config =>
+        {
+            config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(
+                    builder.Configuration.GetConnectionString("SqlConnection"),
+                    new SqlServerStorageOptions
+                    {
+                        PrepareSchemaIfNecessary = true,
+                        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                        QueuePollInterval = TimeSpan.FromSeconds(5)
+                    });
+        });
+        return builder;
+    }
+
     public static WebApplicationBuilder AddSerilogLogging(this WebApplicationBuilder builder)
     {
         var outputTemplate =
@@ -93,5 +111,23 @@ public static class BuilderExtensions
         builder.Host.UseSerilog();
         return builder;
     }
-    
+    // public static WebApplicationBuilder AddHangfire(this WebApplicationBuilder builder)
+    // {
+    //     builder.Services.AddHangfire(config =>
+    //     {
+    //         config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    //             .UseSimpleAssemblyNameTypeSerializer()
+    //             .UseRecommendedSerializerSettings()
+    //             .UseSqlServerStorage(
+    //                 builder.Configuration.GetConnectionString("SqlConnection"),
+    //                 new SqlServerStorageOptions
+    //                 {
+    //                     PrepareSchemaIfNecessary = true, 
+    //                     CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+    //                     SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+    //                     QueuePollInterval = TimeSpan.FromSeconds(5)
+    //                 });
+    //     });
+    //     return builder;
+    // }
 }
