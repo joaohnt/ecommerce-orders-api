@@ -57,4 +57,10 @@ public class Order
         Status =  Status.Canceled;
         UpdatedAt = DateTime.UtcNow;
     }
+    
+    public void UpdateOrderStatusToProcessed()
+    {
+        Status = Status.Processed;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

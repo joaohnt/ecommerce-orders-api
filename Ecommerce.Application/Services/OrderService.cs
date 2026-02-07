@@ -14,7 +14,7 @@ public class OrderService : IOrderService
         _orderRepository = orderRepository;
     }
     
-    public async Task<OrderDTO> CreateOrder (OrderDTO orderDto)
+    public async Task<Order> CreateOrder (OrderDTO orderDto)
     {
         var order = new Order();
         
@@ -23,7 +23,7 @@ public class OrderService : IOrderService
         order.EnsureHasItems();
         
         await _orderRepository.CreateOrder(order);
-        return orderDto;
+        return order;
     }
 
     public async Task<List<Order>> GetOrders()
