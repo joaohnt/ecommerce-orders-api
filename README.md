@@ -1,6 +1,6 @@
 # Ecommerce Orders API
 
-API de pedidos com arquitetura em camadas, processamento assíncrono via mensageria e worker de background.
+API de pedidos com arquitetura limpa, processamento assíncrono via mensageria e worker de background.
 
 ## Visão Geral
 
