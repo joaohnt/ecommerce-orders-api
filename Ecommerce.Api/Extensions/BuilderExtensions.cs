@@ -37,17 +37,14 @@ public static class BuilderExtensions
     public static WebApplicationBuilder AddDatabase(this WebApplicationBuilder builder)
     {
         var conn = builder.Configuration.GetConnectionString("SqlConnection");
+
         builder.Services.AddDbContext<EcommerceDbContext>(options =>
-            options.UseSqlServer(conn, sql => sql.EnableRetryOnFailure()));
-        
-        builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
-        builder.Services.AddSingleton<IMongoClient>(sp =>
-        {
-            var settings = builder.Configuration
-                .GetSection("MongoDb")
-                .Get<MongoDbSettings>();
-            return new MongoClient(settings!.ConnectionString);
-        });
+            options.UseSqlServer(
+                conn,
+                sql => sql.MigrationsAssembly("Ecommerce.Infrastructure")
+            )
+        );
+
         return builder;
     }
 
