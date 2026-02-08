@@ -23,7 +23,7 @@ public class OrderCreatedConsumer : IConsumer<OrderCreatedPayload>
     public async Task Consume(ConsumeContext<OrderCreatedPayload> context)
     {
         _logger.LogInformation($"Order {context.Message.Id} received");
-        
-         _backgroundJobClient.Enqueue<ProcessOrderJob>(job => job.Handle(context.Message.Id));
+
+        _backgroundJobClient.Schedule<ProcessOrderJob>(job => job.Handle(context.Message.Id), TimeSpan.FromSeconds(30));   
     }
 }
